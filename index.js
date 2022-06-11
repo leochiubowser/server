@@ -112,9 +112,18 @@ app.post("/", (req, res) => {
 
 
 app.post("/login", (req, res) => {
+    var result;
     var correct = false
     var account = req.body.account
     var password = req.body.password
+    var correct_i;
+
+    result = {
+        name: ""
+    }
+    result = JSON.stringify(result)
+    fs.writeFileSync("./leochiu/comments/data/login.json", result, "utf-8")
+
     data = fs.readFileSync("./data/account.json", "utf-8")
     data = JSON.parse(data)
 
@@ -122,11 +131,17 @@ app.post("/login", (req, res) => {
         if (account == data[i].account) {
             if (data[i].password == password) {
                 correct = true
+                correct_i = i;
             }
         }
     }
     if (correct) {
         res.sendFile(__dirname + "/leochiu/comments/main.html")
+        result = {
+            name: data[correct_i].name
+        }
+        result = JSON.stringify(result)
+        fs.writeFileSync("./leochiu/comments/data/login.json", result, "utf-8")
     }
     else {
         res.sendFile(__dirname + "/leochiu/comments/wrong.html")
