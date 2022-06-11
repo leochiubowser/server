@@ -100,9 +100,6 @@
         gap: 1cm;
     }
 
-    /* Account & password */
-
-
 
     #account {
         height: 0.7cm;
@@ -127,6 +124,7 @@
         font-weight: bold;
         border-radius: 5px;
     }
+
 
 
 }

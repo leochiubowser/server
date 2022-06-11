@@ -126,12 +126,10 @@ app.post("/login", (req, res) => {
         }
     }
     if (correct) {
-        // loginJson("true")
         res.sendFile(__dirname + "/leochiu/comments/main.html")
     }
     else {
-        // loginJson("false")
-        res.sendFile(__dirname + "/leochiu/comments/index.html")
+        res.sendFile(__dirname + "/leochiu/comments/wrong.html")
     }
 })
 
