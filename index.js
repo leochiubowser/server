@@ -107,20 +107,33 @@ app.post("/", (req, res) => {
         data = JSON.stringify(data)
         fs.writeFileSync("./leochiu/comments/data/comments.json", data, "utf-8")
     }
-    res.sendFile(__dirname + "/leochiu/comments/index.html");
+    res.sendFile(__dirname + "/leochiu/comments/main.html");
 })
+
 
 app.post("/login", (req, res) => {
+    var correct = false
+    var account = req.body.account
+    var password = req.body.password
+    data = fs.readFileSync("./data/account.json", "utf-8")
+    data = JSON.parse(data)
 
-
-
-
-
-
+    for (let i = 0; i < data.length; i++) {
+        if (account == data[i].account) {
+            if (data[i].password == password) {
+                correct = true
+            }
+        }
+    }
+    if (correct) {
+        // loginJson("true")
+        res.sendFile(__dirname + "/leochiu/comments/main.html")
+    }
+    else {
+        // loginJson("false")
+        res.sendFile(__dirname + "/leochiu/comments/index.html")
+    }
 })
-
-
-
 
 
 // 監聽 https預設桿:443
