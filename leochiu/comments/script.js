@@ -1,13 +1,37 @@
 //讀取Json file 
 var body = document.querySelector("span")
+var currentResultLength;
+var isFirst = true
 
-fetch("../comments/data/comments.json")
-    .then(data => data.json())
-    .then(result => {
-        Getresult(result);
-    })
+fetchComments();
 
+function fetchComments() {
+    fetch("../comments/data/comments.json")
+        .then(data => data.json())
+        .then(result => {
+            Getresult(result)
+            var res1 = setInterval(() => {
+                fetchcurrentComments();
+                if (result.length != currentResultLength) {
+                    if (isFirst == true) {
+                        isFirst = false
+                    }
+                    else {
+                        clearInterval(res1)
+                        update()
+                    }
+                }
+            }, 1000)
+        })
+}
 
+function fetchcurrentComments() {
+    fetch("../comments/data/comments.json")
+        .then(data => data.json())
+        .then(result => {
+            currentResultLength = result.length
+        })
+}
 
 //將資料傳到函式中處理
 
@@ -43,6 +67,19 @@ function Getresult(data) {
         i -= 1
     }
 }
+
+
+//更新留言
+
+function update() {
+    var elements = document.querySelectorAll("div")
+    for (var i = 0; i < elements.length; i++) {
+        elements[i].remove();
+    }
+    fetchComments();
+}
+
+
 
 //處理時間
 
@@ -111,4 +148,3 @@ submit.addEventListener("click", () => {
         alert("請輸入內容!")
     }
 })
-
