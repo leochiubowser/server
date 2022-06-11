@@ -1,4 +1,6 @@
 //讀取Json file 
+location.replace("./main.html")
+
 var body = document.querySelector("span")
 var currentResultLength;
 var isFirst = true
