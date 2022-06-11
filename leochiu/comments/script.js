@@ -21,7 +21,7 @@ function fetchComments() {
                         update()
                     }
                 }
-            }, 1000)
+            }, 100)
         })
 }
 
