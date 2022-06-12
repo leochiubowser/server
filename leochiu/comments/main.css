@@ -125,11 +125,10 @@
 @media screen and (max-width: 1466px) {
     span {
         position: absolute;
-        top: 47.5vh;
+        top: 9cm;
         width: 80vw;
-        left: 50vw;
-        right: 50vw;
-        height: 65vh;
+        left: 49vw;
+        height: 50vh;
         overflow-x: hidden;
         overflow-y: auto;
         transform: translate(-50%, -50%);
@@ -142,9 +141,10 @@
     #submit {
         position: absolute;
         left: 85vw;
-        top: 85vh;
+        bottom: 1px;
+        top: 80vh;
         transform: translate(-50%, -50%);
-        z-index: 1;
+        z-index: 10;
     }
 
     #content {
@@ -152,8 +152,8 @@
         width: 75vw;
         border-radius: 5px;
         position: absolute;
+        top: 80vh;
         left: 50vw;
-        top: 85vh;
         border: 2px solid black;
         transform: translate(-50%, -50%);
         z-index: 0;
