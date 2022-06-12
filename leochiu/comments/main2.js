@@ -1,5 +1,4 @@
 //手機視窗select偵測
-
 var section3 = document.getElementById("section3");
 var section4 = document.getElementById("section4");
 var show = false;
@@ -62,16 +61,3 @@ $("#section4").click(function () {
         close();
     }
 });
-
-//登入
-
-
-// fetch("../../data/account.json")
-//     .then(data => data.json())
-//     .then(result => {
-//         if (result.name == "") {
-
-//             // location.replace("../comments/index.html")
-//         }
-//     })
-

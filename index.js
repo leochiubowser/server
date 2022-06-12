@@ -5,6 +5,7 @@ const path = require('path');
 const fs = require('fs');
 const express = require('express');
 const app = express();
+
 const server = https.createServer(
     {
         key: fs.readFileSync(path.join("key.pem")),
@@ -118,11 +119,7 @@ app.post("/login", (req, res) => {
     var password = req.body.password
     var correct_i;
 
-    result = {
-        name: ""
-    }
-    result = JSON.stringify(result)
-    fs.writeFileSync("./leochiu/comments/data/login.json", result, "utf-8")
+    // sessionStorage.setItem("name", "")
 
     data = fs.readFileSync("./data/account.json", "utf-8")
     data = JSON.parse(data)
@@ -137,17 +134,11 @@ app.post("/login", (req, res) => {
     }
     if (correct) {
         res.sendFile(__dirname + "/leochiu/comments/main.html")
-        result = {
-            name: data[correct_i].name
-        }
-        result = JSON.stringify(result)
-        fs.writeFileSync("./leochiu/comments/data/login.json", result, "utf-8")
+        // sessionStorage.setItem("name", data[correct_i].name)
     }
     else {
         res.sendFile(__dirname + "/leochiu/comments/wrong.html")
     }
 })
-
-
 // 監聽 https預設桿:443
 server.listen(443);

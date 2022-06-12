@@ -116,7 +116,7 @@ function getTime(index) {
         var result = date_01 - date_02
 
         if (result / 1000 < 60) {
-            return `${Math.round(result / 1000)}秒前`
+            return `${Math.abs(Math.round(result / 1000))}秒前`
         }
         else if (result / 1000 / 60 < 60) {
             return `${Math.round(result / 1000 / 60)}分鐘前`
@@ -149,3 +149,4 @@ submit.addEventListener("click", () => {
         alert("請輸入內容!")
     }
 })
+
