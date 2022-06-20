@@ -106,34 +106,35 @@ function upDateTime() {
 function getTime(index) {
     upDateTime();
 
-    if (year == index.year && month == index.month && date == index.date && hour == index.hour && minute == index.minute && second == index.second) {
-        return "現在";
-    }
-    else {
-        var date_01 = new Date();
-        var date_02 = new Date(index.year + "/" + index.month + "/" + index.date);
-        date_02.setHours(index.hour, index.minute, index.second);
-        var result = date_01 - date_02
+    var date_01 = new Date();
+    var date_02 = new Date(index.year + "/" + index.month + "/" + index.date);
+    date_02.setHours(index.hour, index.minute, index.second);
+    var result = date_01 - date_02
 
-        if (result / 1000 < 60) {
-            return `${Math.abs(Math.round(result / 1000))}秒前`
-        }
-        else if (result / 1000 / 60 < 60) {
-            return `${Math.round(result / 1000 / 60)}分鐘前`
-        }
-        else if (result / 1000 / 60 / 60 < 24) {
-            return `${Math.round(result / 1000 / 60 / 60)}小時前`
-        }
-        else if (result / 1000 / 60 / 60 / 24 < 30) {
-            return `${Math.round(result / 1000 / 60 / 60 / 24)}天前`
-        }
-        else if (result / 1000 / 60 / 60 / 24 / 30 < 12) {
-            return `${Math.round(result / 1000 / 60 / 60 / 24 / 30)}個月前`
+    if (result / 1000 < 60) {
+        if (Math.abs(Math.round(result / 1000)) == 0) {
+            return "現在";
         }
         else {
-            return `${Math.round(result / 1000 / 60 / 60 / 24 / 30 / 12)}年前`
+            return `${Math.abs(Math.round(result / 1000))}秒前`
         }
     }
+    else if (result / 1000 / 60 < 60) {
+        return `${Math.round(result / 1000 / 60)}分鐘前`
+    }
+    else if (result / 1000 / 60 / 60 < 24) {
+        return `${Math.round(result / 1000 / 60 / 60)}小時前`
+    }
+    else if (result / 1000 / 60 / 60 / 24 < 30) {
+        return `${Math.round(result / 1000 / 60 / 60 / 24)}天前`
+    }
+    else if (result / 1000 / 60 / 60 / 24 / 30 < 12) {
+        return `${Math.round(result / 1000 / 60 / 60 / 24 / 30)}個月前`
+    }
+    else {
+        return `${Math.round(result / 1000 / 60 / 60 / 24 / 30 / 12)}年前`
+    }
+
 
 }
 
