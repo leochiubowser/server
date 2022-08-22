@@ -1,0 +1,89 @@
+Download vscode && node >  https://code.visualstudio.com/   https://nodejs.org/en/
+
+貼上程式碼:
+
+const http = require("http");
+const server = http.createServer((req, res) => {
+    res.write("Hello, World !");
+    res.end();
+})
+
+server.listen(80);
+
+// http 預設80桿
+
+IP轉接
+
+http://192.168.0.1/login.html
+> 進階 > NAT > (開啟)通訊桿轉發 > 新增 > TCP > https://www.whatismyip.com.tw/tw/(查詢IP、輸入) > 80 > 80 
+
+https://www.noip.com/ > My Srevices > DNS Records > Add A Hostname > 輸入IP 、 域名等
+https://www.noip.com/download?page=win > 下載 > 登入 > 添加設定好的域名
+
+
+
+申請證書
+https://manage.sslforfree.com/certificate/install/04d30831d8ad9f1e9b6c106e5d3b5a1c
+
+下載後放入資料夾
+轉檔: openssl
+
+下載: https://slproweb.com/products/Win32OpenSSL.html
+讓 cmd 可以取用:
+搜尋:環境變數 > 打開 > 環境變數 > 系統變數 > PATH > 新增 > C:\Program Files\OpenSSL-Win64\bin > 確定到底
+
+openssl rsa -in private.key -text > private.pem
+openssl x509 -inform PEM -in certificate.crt > certificate.pem
+openssl x509 -inform PEM -in ca_bundle.crt > ca_bundle.pem
+
+貼上程式碼:
+
+const https = require('https');
+const path = require('path');
+const fs = require('fs');
+const express = require('express');
+const app = express();
+const server = https.createServer(
+    {
+        key: fs.readFileSync(path.join("key.pem")),
+        cert: fs.readFileSync(path.join("cert.pem")),
+    },
+    app
+);
+
+app.use('/', (req, res) => {
+    console.log(req.ip);
+    res.send('<h1>Made by anjh71103 LeoChiu</h1>');
+})
+
+server.listen(443);
+
+//https 預設443桿
+
+提前:安裝express
+
+npm init --yes
+npm install express
+
+
+自動開機執行
+
+安裝使用
+
+> npm insatll pm2
+> pm2 start / stop / delete / list  "filepath"
+
+> npm install pm2-windows-startup -g
+> pm2-startup install
+
+PM2 現在將在啟動時自動恢復保存的進程。要保存當前進程列表，請執行：
+
+> pm2 save
+
+自動執行
+
+> npm install -g nodemon
+
+> nodemon "filepath"
+
+

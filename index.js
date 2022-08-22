@@ -5,11 +5,13 @@ const path = require('path');
 const fs = require('fs');
 const express = require('express');
 const app = express();
+const nodemailer = require("nodemailer")
+const io = require("socket.io")(https)
 
 const server = https.createServer(
     {
-        key: fs.readFileSync(path.join("key.pem")),
-        cert: fs.readFileSync(path.join("cert.pem")),
+        key: fs.readFileSync(path.join("./private.key")),
+        cert: fs.readFileSync(path.join("./cert.crt")),
     },
     app,
 );
@@ -23,6 +25,16 @@ app.get("/", (req, res) => {
 app.get("/index.html", (req, res) => {
     loadPeople();
     res.sendFile(__dirname + "/leochiu/index.html");
+})
+
+
+//阻止闖入留言
+
+app.get("/login", (req, res) => {
+    res.sendFile(__dirname + "/leochiu/comments/index.html");
+})
+app.get("/comments/main.html", (req, res) => {
+    res.sendFile(__dirname + "/leochiu/comments/index.html");
 })
 
 
@@ -51,7 +63,7 @@ function loadPeople() {
 //寫入
 
 function write(num) {
-    fs.writeFile("./leochiu/data/people.txt", num, (err, data) => { })
+    fs.writeFileSync("./leochiu/data/people.txt", num)
 }
 
 //寫入留言
@@ -86,14 +98,26 @@ function getDate() {
 }
 
 
-app.post("/", (req, res) => {
+app.post("/comments", (req, res) => {
     var content = req.body.content
+    var id = req.body.timer
+    var isRepeat = false
+
     if (content != "") {
         data = fs.readFileSync("./leochiu/comments/data/comments.json", "utf-8")
         data = JSON.parse(data)
+
+        // 判斷是否為重新載入後自動新增的訊息
+        for (var i = 0; i < data.length; i++) {
+            if (data[i].id == id) {
+                isRepeat = true
+            }
+        }
+
         getDate();
         data[data.length] = {
             user_name: "Leo Chiu",
+            id: req.body.timer,
             time: {
                 year: year,
                 month: month,
@@ -106,9 +130,13 @@ app.post("/", (req, res) => {
             content: content
         }
         data = JSON.stringify(data)
-        fs.writeFileSync("./leochiu/comments/data/comments.json", data, "utf-8")
+
+        if (isRepeat == false) {
+            fs.writeFileSync("./leochiu/comments/data/comments.json", data, "utf-8")
+        }
     }
     res.sendFile(__dirname + "/leochiu/comments/main.html");
+
 })
 
 
@@ -133,12 +161,66 @@ app.post("/login", (req, res) => {
         }
     }
     if (correct) {
-        res.sendFile(__dirname + "/leochiu/comments/main.html")
-        // sessionStorage.setItem("name", data[correct_i].name)
+        res.sendFile(__dirname + "/leochiu/comment/index.html")
     }
     else {
         res.sendFile(__dirname + "/leochiu/comments/wrong.html")
     }
+
 })
+
+
+//Send Email
+
+app.post("/SendEmail", (req, res) => {
+
+    var transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+            user: "ANJH811@gmail.com",
+            pass: "zkcsettzywudeaoo"
+        }
+    })
+
+    var mailOptions = {
+        from: "ANJH811@gmail.com",
+        to: `${req.body.email}`,
+        subject: `${req.body.title}`,
+        text: `${req.body.content}`,
+        // html: '<h1>Welcome</h1><p>That was easy!</p>',
+        // attachments: [{
+        //     path: "./anjh811_linebot_icon.png",
+        // }, {
+        //     filename: "description.txt",
+        //     content: "This is the txt file."
+        // }]
+    }
+
+
+
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            res.sendFile(__dirname + "/leochiu/SendEmail/fail.html")
+        }
+        else {
+            // console.log("Email sent : " + info.response)
+            res.sendFile(__dirname + "/leochiu/SendEmail/finish.html")
+        }
+    })
+
+
+})
+
+// Socket.io
+
+
+io.on("connection", (socket) => {
+    console.log("Someone Connected!")
+})
+
+
+
 // 監聽 https預設桿:443
+
 server.listen(443);
+io.listen(server);

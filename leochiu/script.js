@@ -1,25 +1,3 @@
-//左側主圖片切換
-var select_left = document.getElementById("select_left");
-select_left.addEventListener("click", () => {
-    select_left.src = "image/select_left_yellow.png";
-    changeImage("left");
-    var change1 = setInterval(() => {
-        select_left.src = "image/select_left.png";
-        clearInterval(change1);
-    }, 400)
-})
-
-//右側主圖片切換
-var select_right = document.getElementById("select_right");
-select_right.addEventListener("click", () => {
-    select_right.src = "image/select_right_yellow.png";
-    changeImage("right");
-    var change2 = setInterval(() => {
-        select_right.src = "image/select_right.png";
-        clearInterval(change2);
-    }, 400)
-})
-
 
 //主版面圖片途徑
 
@@ -48,10 +26,16 @@ var mainPath = [
 var nowMainImage = 0;
 
 
+
 var main_image = document.getElementById("main_image");
 var main_image1_title_notes = document.getElementById("main_image1_title_notes");
 var main_image1_title = document.getElementById("main_image1_title");
 var main_link = document.getElementById("main_link");
+var select1 = document.getElementById("select_picture_1")
+var select2 = document.getElementById("select_picture_2")
+var select3 = document.getElementById("select_picture_3")
+var select4 = document.getElementById("select_picture_4")
+
 
 //切換主圖片處理函式(方向)
 function changeImage(direction) {
@@ -82,13 +66,52 @@ function updateMainImage() {
     main_image1_title_notes.textContent = mainPath[nowMainImage].title_notes;
     main_image1_title.textContent = mainPath[nowMainImage].title;
     main_link.href = mainPath[nowMainImage].link;
+    chageSelectPicture()
 }
+
+function chageSelectPicture(){
+    switch (nowMainImage) {
+        case 0:
+            select1.src = "image/select_picture_fill.png"
+            select2.src = "image/select_picture_none.png"
+            select3.src = "image/select_picture_none.png"
+            select4.src = "image/select_picture_none.png"
+            break;
+        case 1:
+            select1.src = "image/select_picture_none.png"
+            select2.src = "image/select_picture_fill.png"
+            select3.src = "image/select_picture_none.png"
+            select4.src = "image/select_picture_none.png"
+            break;
+        case 2:
+            select1.src = "image/select_picture_none.png"
+            select2.src = "image/select_picture_none.png"
+            select3.src = "image/select_picture_fill.png"
+            select4.src = "image/select_picture_none.png"
+            break;
+        case 3:
+            select1.src = "image/select_picture_none.png"
+            select2.src = "image/select_picture_none.png"
+            select3.src = "image/select_picture_none.png"
+            select4.src = "image/select_picture_fill.png"
+            break;
+    
+    }
+}
+
+//定時切換圖片
+
+
+setInterval(() => {
+    changeImage("right");    
+}, 3000)
 
 
 //手機視窗select偵測
 
 var section3 = document.getElementById("section3");
 var section4 = document.getElementById("section4");
+var show_screen = document.getElementById("show_screen")
 var show = false;
 
 function open() {
@@ -109,9 +132,15 @@ function open() {
     section3.style.display = "block";
     section4.style.display = "block";
     show = true;
+
+
+    setTimeout(() => {
+        Show_screen()
+    }, 500)
 }
 
 function close() {
+    Close_screen()
     $("#section").animate({
         width: "0%"
     }, 300);
@@ -149,3 +178,15 @@ $("#section4").click(function () {
         close();
     }
 });
+
+
+// 收合視窗文字
+
+
+function Show_screen() {
+    show_screen.style.display = "block"
+}
+
+function Close_screen() {
+    show_screen.style.display = "none"
+}

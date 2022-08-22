@@ -63,15 +63,3 @@ $("#section4").click(function () {
     }
 });
 
-//登入
-
-
-// fetch("../../data/account.json")
-//     .then(data => data.json())
-//     .then(result => {
-//         if (result.name == "") {
-
-//             // location.replace("../comments/index.html")
-//         }
-//     })
-

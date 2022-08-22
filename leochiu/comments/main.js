@@ -151,3 +151,23 @@ submit.addEventListener("click", () => {
     }
 })
 
+
+//Avoid send the message again
+
+
+
+//Generate an id, and only the refresh-id will be the same
+
+var timer_input = document.getElementById("timer_input")
+
+var id = Math.random()
+id = id.toString().substring(2)
+
+var id2 = Math.random()
+id2 = id2.toString().substring(2)
+
+timer_input.value = id + id2
+
+//Disable "確認重新提交表單" alert
+
+// window.history.replaceState(null, null, "https://leochiu.ddns.net/comments/main.html");
