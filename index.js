@@ -31,10 +31,10 @@ app.get("/index.html", (req, res) => {
 //阻止闖入留言
 
 app.get("/login", (req, res) => {
-    res.sendFile(__dirname + "/leochiu/comments/index.html");
+    res.sendFile(__dirname + "/leochiu/comment/index.html");
 })
 app.get("/comments/main.html", (req, res) => {
-    res.sendFile(__dirname + "/leochiu/comments/index.html");
+    res.sendFile(__dirname + "/leochiu/comment/index.html");
 })
 
 
@@ -98,77 +98,53 @@ function getDate() {
 }
 
 
-app.post("/comments", (req, res) => {
-    var content = req.body.content
-    var id = req.body.timer
-    var isRepeat = false
-
-    if (content != "") {
-        data = fs.readFileSync("./leochiu/comments/data/comments.json", "utf-8")
-        data = JSON.parse(data)
-
-        // 判斷是否為重新載入後自動新增的訊息
-        for (var i = 0; i < data.length; i++) {
-            if (data[i].id == id) {
-                isRepeat = true
-            }
-        }
-
-        getDate();
-        data[data.length] = {
-            user_name: "Leo Chiu",
-            id: req.body.timer,
-            time: {
-                year: year,
-                month: month,
-                date: date,
-                day: day,
-                hour: hour,
-                minute: minute,
-                second: second
-            },
-            content: content
-        }
-        data = JSON.stringify(data)
-
-        if (isRepeat == false) {
-            fs.writeFileSync("./leochiu/comments/data/comments.json", data, "utf-8")
-        }
-    }
-    res.sendFile(__dirname + "/leochiu/comments/main.html");
-
-})
 
 
-app.post("/login", (req, res) => {
-    var result;
-    var correct = false
-    var account = req.body.account
-    var password = req.body.password
-    var correct_i;
+// Socket.io
 
-    // sessionStorage.setItem("name", "")
 
-    data = fs.readFileSync("./data/account.json", "utf-8")
-    data = JSON.parse(data)
 
-    for (let i = 0; i < data.length; i++) {
-        if (account == data[i].account) {
-            if (data[i].password == password) {
-                correct = true
-                correct_i = i;
-            }
-        }
-    }
-    if (correct) {
-        res.sendFile(__dirname + "/leochiu/comment/index.html")
-    }
-    else {
-        res.sendFile(__dirname + "/leochiu/comments/wrong.html")
-    }
+io.on('connection', (socket) => {
+    socket.on('chat message', msg => {
+        io.emit('chat message', msg);
+    });
+});
 
-})
 
+
+// app.post("/login", (req, res) => {
+//     var result;
+//     var correct = false
+//     var account = req.body.account
+//     var password = req.body.password
+//     var correct_i;
+
+//     // sessionStorage.setItem("name", "")
+
+//     data = fs.readFileSync("./data/account.json", "utf-8")
+//     data = JSON.parse(data)
+
+//     for (let i = 0; i < data.length; i++) {
+//         if (account == data[i].account) {
+//             if (data[i].password == password) {
+//                 correct = true
+//                 correct_i = i;
+//             }
+//         }
+//     }
+//     if (correct) {
+//         res.sendFile(__dirname + "/leochiu/comment/index.html")
+//     }
+//     else {
+//         res.sendFile(__dirname + "/leochiu/comments/wrong.html")
+//     }
+
+// })
+
+
+
+
+// 監聽 https預設桿:443
 
 //Send Email
 
@@ -211,16 +187,6 @@ app.post("/SendEmail", (req, res) => {
 
 })
 
-// Socket.io
-
-
-io.on("connection", (socket) => {
-    console.log("Someone Connected!")
-})
-
-
-
-// 監聽 https預設桿:443
 
 server.listen(443);
 io.listen(server);
